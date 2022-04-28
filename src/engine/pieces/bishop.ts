@@ -14,68 +14,50 @@ export default class Bishop extends Piece {
 
         const availableForwardsMoves = this.getAvailableForwardsMoves(currentLocation);
         const availableBackwardsMoves = this.getAvailableBackwardsMoves(currentLocation);
+        const availableMoves = availableForwardsMoves.concat(availableBackwardsMoves);
 
-        return availableForwardsMoves.concat(availableBackwardsMoves);
+        return availableMoves.filter(square => {
+            return !square.equals(currentLocation);
+        });
     }
 
     private getAvailableForwardsMoves(currentLocation: Square) {
-        const availableForwardsMoves: Square[] = [];
-
         const offset = Math.abs(currentLocation.row - currentLocation.col);
+        const lengthOfDiagonal = GameSettings.BOARD_SIZE - offset;
 
-        if (currentLocation.row >= currentLocation.col) {
+        const availableForwardsMoves = Array(lengthOfDiagonal).fill(undefined);
 
-            for (let i = 0; i + offset < GameSettings.BOARD_SIZE; i++) {
-                const newSquare = Square.at(i + offset, i);
-
-                if (!newSquare.equals(currentLocation)) {
-                    availableForwardsMoves.push(newSquare);
-                }
-            }
+        if (this.inTopLeftOfBoard(currentLocation)) {
+            return availableForwardsMoves.map((square, i) => {
+                return Square.at(i + offset, i);
+            });
+        } else {
+            return availableForwardsMoves.map((square, i) => {
+                return Square.at(i, i + offset);
+            });
         }
-
-        if (currentLocation.row < currentLocation.col) {
-
-            for (let i = 0; i + offset < GameSettings.BOARD_SIZE; i++) {
-                const newSquare = Square.at(i, i + offset);
-
-                if (!newSquare.equals(currentLocation)) {
-                    availableForwardsMoves.push(newSquare);
-                }
-            }
-        }
-
-        return availableForwardsMoves;
     }
 
     private getAvailableBackwardsMoves(currentLocation: Square) {
-        const availableBackwardsMoves: Square[] = [];
+        const offset = Math.abs(currentLocation.row - currentLocation.col);
         const total = currentLocation.row + currentLocation.col;
-        const minIndex = 0;
         const maxIndex = GameSettings.BOARD_SIZE - 1;
+        const lengthOfDiagonal = GameSettings.BOARD_SIZE - Math.abs(total - maxIndex);
 
-        if (currentLocation.row >= currentLocation.col) {
-            const lengthOfDiagonal = GameSettings.BOARD_SIZE - Math.abs(total - maxIndex);
-            for (let i = 0; i < lengthOfDiagonal; i++) {
-                const newSquare = Square.at(maxIndex - i, total - (maxIndex - i));
+        const availableBackwardsMoves = Array(lengthOfDiagonal).fill(undefined);
 
-                if (!newSquare.equals(currentLocation)) {
-                    availableBackwardsMoves.push(newSquare);
-                }
-            }
+        if (this.inTopLeftOfBoard(currentLocation)) {
+            return availableBackwardsMoves.map((square, i) => {
+                return Square.at(maxIndex - i, total - (maxIndex - i));
+            });
+        } else {
+            return availableBackwardsMoves.map((square, i) => {
+                return Square.at(i, total - i);
+            });
         }
+    }
 
-        if (currentLocation.row < currentLocation.col) {
-            const lengthOfDiagonal = GameSettings.BOARD_SIZE - Math.abs(total - maxIndex);
-            for (let i = 0; i < lengthOfDiagonal; i++) {
-                const newSquare = Square.at(minIndex + i, total - (minIndex + i));
-
-                if (!newSquare.equals(currentLocation)) {
-                    availableBackwardsMoves.push(newSquare);
-                }
-            }
-        }
-
-        return availableBackwardsMoves;
+    private inTopLeftOfBoard(currentLocation: Square) {
+        return currentLocation.row >= currentLocation.col;
     }
 }

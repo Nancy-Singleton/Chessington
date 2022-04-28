@@ -19,29 +19,23 @@ export default class Rook extends Piece {
     }
 
     private getAvailableHorizontalMoves(currentLocation: Square) {
-        const availableHorizontalMoves: Square[] = [];
-
-        for (let i = 0; i < GameSettings.BOARD_SIZE; i++) {
-            const newSquare = Square.at(currentLocation.row, i);
-            if (!newSquare.equals(currentLocation)) {
-                availableHorizontalMoves.push(newSquare);
-            }
-        }
-
-        return availableHorizontalMoves;
+        return Array(GameSettings.BOARD_SIZE)
+            .fill(undefined)
+            .map((item, index) => {
+                return Square.at(currentLocation.row, index);
+            }).filter(square => {
+                return !square.equals(currentLocation);
+            });
     }
 
     private getAvailableVerticalMoves(currentLocation: Square) {
-        const availableVerticalMoves: Square[] = [];
-
-        for (let i = 0; i < GameSettings.BOARD_SIZE; i++) {
-            const newSquare = Square.at(i, currentLocation.col);
-            if (!newSquare.equals(currentLocation)) {
-                availableVerticalMoves.push(newSquare);
-            }
-        }
-
-        return availableVerticalMoves;
+        return Array(GameSettings.BOARD_SIZE)
+            .fill(undefined)
+            .map((item, index) => {
+                return Square.at(index, currentLocation.col);
+            }).filter(square => {
+                return !square.equals(currentLocation);
+            });
     }
 }
 
