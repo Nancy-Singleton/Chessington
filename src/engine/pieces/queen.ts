@@ -13,8 +13,8 @@ export default class Queen extends Piece {
         const currentLocation = board.findPiece(this);
 
         const availableMoves = (new Array).concat(
-            this.getHorizontalMoves(currentLocation),
-            this.getVerticalMoves(currentLocation),
+            this.getHorizontalMoves(board, currentLocation),
+            this.getVerticalMoves(board, currentLocation),
             this.getForwardsDiagonalMoves(currentLocation),
             this.getBackwardsDiagonalMoves(currentLocation));
 

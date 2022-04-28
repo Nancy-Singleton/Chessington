@@ -20,20 +20,56 @@ export default class Piece {
         return currentLocation.row >= currentLocation.col;
     }
 
-    protected getHorizontalMoves(currentLocation: Square) {
+    protected getHorizontalMoves(board: Board, currentLocation: Square) {
         return Array(GameSettings.BOARD_SIZE)
             .fill(undefined)
             .map((item, index) => {
                 return Square.at(currentLocation.row, index);
+            })
+            .filter(targetSquare => {
+                return this.horizontalPathIsClear(board, currentLocation, targetSquare);
             });
     }
 
-    protected getVerticalMoves(currentLocation: Square) {
+    protected horizontalPathIsClear(board: Board, currentLocation: Square, targetSquare: Square) {
+        const minimumCol = Math.min(currentLocation.col, targetSquare.col);
+        const maximumCol = Math.max(currentLocation.col, targetSquare.col);
+        let pathClear = true;
+
+        for (let i = 1; i + minimumCol < maximumCol ; i++) {
+            if (!!board.getPiece(Square.at(currentLocation.row, minimumCol + i))) {
+                pathClear = false;
+                break;
+            }
+        }
+
+        return pathClear;
+    }
+
+    protected getVerticalMoves(board: Board, currentLocation: Square) {
         return Array(GameSettings.BOARD_SIZE)
             .fill(undefined)
             .map((item, index) => {
                 return Square.at(index, currentLocation.col);
+            })
+            .filter(targetSquare => {
+                return this.verticalPathIsClear(board, currentLocation, targetSquare);
             });
+    }
+
+    protected verticalPathIsClear(board: Board, currentLocation: Square, targetSquare: Square) {
+        const minimumRow = Math.min(currentLocation.row, targetSquare.row);
+        const maximumRow = Math.max(currentLocation.row, targetSquare.row);
+        let pathClear = true;
+
+        for (let i = 1; i + minimumRow < maximumRow; i++) {
+            if (!!board.getPiece(Square.at(minimumRow + i, currentLocation.col))) {
+                pathClear = false;
+                break;
+            }
+        }
+
+        return pathClear;
     }
 
     protected getForwardsDiagonalMoves(currentLocation: Square) {
