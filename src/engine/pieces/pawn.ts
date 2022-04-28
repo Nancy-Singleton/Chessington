@@ -11,9 +11,9 @@ export default class Pawn extends Piece {
     getAvailableMoves(board: Board) {
         const currentLocation = board.findPiece(this);
         const availableMoves = [];
-        availableMoves.push(this.moveForwardOne(currentLocation));
+        availableMoves.push(this.locationIfMoveForwardOne(currentLocation));
         if (this.hasNotMoved(currentLocation)) {
-            availableMoves.push(this.moveForwardTwo(currentLocation));
+            availableMoves.push(this.locationIfMoveForwardTwo(currentLocation));
         }
         return availableMoves;
     }
@@ -23,7 +23,7 @@ export default class Pawn extends Piece {
             || (this.player === Player.BLACK && currentLocation.row === 6);
     }
 
-    private moveForwardOne(currentLocation: Square): Square {
+    private locationIfMoveForwardOne(currentLocation: Square): Square {
         if (this.player === Player.WHITE) {
             return Square.at(currentLocation.row + 1, currentLocation.col)
         } else {
@@ -31,7 +31,7 @@ export default class Pawn extends Piece {
         }
     }
 
-    private moveForwardTwo(currentLocation: Square): Square {
+    private locationIfMoveForwardTwo(currentLocation: Square): Square {
         if (this.player === Player.WHITE) {
             return Square.at(currentLocation.row + 2, currentLocation.col)
         } else {
