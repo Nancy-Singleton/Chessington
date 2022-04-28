@@ -33,4 +33,20 @@ describe('Bishop', () => {
 
         moves.should.have.length(11);
     });
+
+    it('can move diagonally 2', () => {
+        const bishop = new Bishop(Player.WHITE);
+        board.setPiece(Square.at(7, 4), bishop);
+
+        const moves = bishop.getAvailableMoves(board);
+
+        const expectedMoves = [
+            // Forwards diagonal
+            Square.at(3, 0), Square.at(4, 1), Square.at(5, 2), Square.at(6, 3),
+            // Backwards diagonal
+            Square.at(6, 5), Square.at(5, 6), Square.at(4, 7)
+        ];
+
+        moves.should.deep.include.members(expectedMoves);
+    });
 });
