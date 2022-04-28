@@ -11,10 +11,15 @@ export default class Pawn extends Piece {
     getAvailableMoves(board: Board) {
         const currentLocation = board.findPiece(this);
         const availableMoves = [];
-        availableMoves.push(this.locationIfMoveForwardOne(currentLocation));
-        if (this.hasNotMoved(currentLocation)) {
+
+        if (this.allowedToMoveForwardOne(board, currentLocation)) {
+            availableMoves.push(this.locationIfMoveForwardOne(currentLocation));
+        }
+
+        if (this.allowedToMoveForwardTwo(board, currentLocation)) {
             availableMoves.push(this.locationIfMoveForwardTwo(currentLocation));
         }
+
         return availableMoves;
     }
 
@@ -37,5 +42,31 @@ export default class Pawn extends Piece {
         } else {
             return Square.at(currentLocation.row - 2, currentLocation.col)
         }
+    }
+
+    private spaceAheadIsClear(board: Board, currentLocation: Square) {
+        if (this.player === Player.WHITE) {
+            return !board.getPiece(Square.at(currentLocation.row + 1, currentLocation.col));
+        } else {
+            return !board.getPiece(Square.at(currentLocation.row - 1, currentLocation.col));
+        }
+    }
+
+    private spaceTwoAheadIsClear(board: Board, currentLocation: Square) {
+        if (this.player === Player.WHITE) {
+            return !board.getPiece(Square.at(currentLocation.row + 2, currentLocation.col));
+        } else {
+            return !board.getPiece(Square.at(currentLocation.row - 2, currentLocation.col));
+        }
+    }
+
+    private allowedToMoveForwardOne(board: Board, currentLocation: Square) {
+        return this.spaceAheadIsClear(board, currentLocation);
+    }
+
+    private allowedToMoveForwardTwo(board: Board, currentLocation: Square) {
+        return this.hasNotMoved(currentLocation)
+            && this.spaceAheadIsClear(board, currentLocation)
+            && this.spaceTwoAheadIsClear(board, currentLocation);
     }
 }
