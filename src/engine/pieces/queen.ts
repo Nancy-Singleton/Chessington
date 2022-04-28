@@ -1,6 +1,8 @@
 import Piece from './piece';
 import Board from "../board";
 import Player from "../player";
+import Square from '../square';
+import GameSettings from '../gameSettings';
 
 export default class Queen extends Piece {
     constructor(player: Player) {
@@ -8,6 +10,14 @@ export default class Queen extends Piece {
     }
 
     getAvailableMoves(board: Board) {
-        return new Array(0);
+        const currentLocation = board.findPiece(this);
+
+        const availableMoves = (new Array).concat(
+            this.getHorizontalMoves(currentLocation),
+            this.getVerticalMoves(currentLocation),
+            this.getForwardsDiagonalMoves(currentLocation),
+            this.getBackwardsDiagonalMoves(currentLocation));
+
+        return this.filterOutCurrentLocation(availableMoves,currentLocation);
     }
 }
