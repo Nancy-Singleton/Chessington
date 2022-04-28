@@ -10,7 +10,7 @@ export default class Pawn extends Piece {
 
     getAvailableMoves(board: Board) {
         const currentLocation = board.findPiece(this);
-        let availableMoves = [];
+        const availableMoves = [];
         availableMoves.push(this.moveForwardOne(currentLocation));
         if (this.hasNotMoved(currentLocation)) {
             availableMoves.push(this.moveForwardTwo(currentLocation));

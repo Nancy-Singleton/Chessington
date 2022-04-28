@@ -12,17 +12,17 @@ export default class Rook extends Piece {
     getAvailableMoves(board: Board) {
         const currentLocation = board.findPiece(this);
 
-        let availableHorizontalMoves = this.getAvailableHorizontalMoves(currentLocation);
-        let availableVerticalMoves = this.getAvailableVerticalMoves(currentLocation);
+        const availableHorizontalMoves = this.getAvailableHorizontalMoves(currentLocation);
+        const availableVerticalMoves = this.getAvailableVerticalMoves(currentLocation);
 
         return availableHorizontalMoves.concat(availableVerticalMoves);
     }
 
-    getAvailableHorizontalMoves(currentLocation: Square) {
-        let availableHorizontalMoves: Square[] = [];
+    private getAvailableHorizontalMoves(currentLocation: Square) {
+        const availableHorizontalMoves: Square[] = [];
 
         for (let i = 0; i < GameSettings.BOARD_SIZE; i++) {
-            let newSquare = Square.at(currentLocation.row, i);
+            const newSquare = Square.at(currentLocation.row, i);
             if (!newSquare.equals(currentLocation)) {
                 availableHorizontalMoves.push(newSquare);
             }
@@ -31,11 +31,11 @@ export default class Rook extends Piece {
         return availableHorizontalMoves;
     }
 
-    getAvailableVerticalMoves(currentLocation: Square) {
-        let availableVerticalMoves: Square[] = [];
+    private getAvailableVerticalMoves(currentLocation: Square) {
+        const availableVerticalMoves: Square[] = [];
 
         for (let i = 0; i < GameSettings.BOARD_SIZE; i++) {
-            let newSquare = Square.at(i, currentLocation.col);
+            const newSquare = Square.at(i, currentLocation.col);
             if (!newSquare.equals(currentLocation)) {
                 availableVerticalMoves.push(newSquare);
             }
