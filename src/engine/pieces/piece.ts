@@ -77,4 +77,13 @@ export default class Piece {
             return !square.equals(currentLocation);
         })
     }
+
+    filterOutSquaresOutOfBounds(availableMoves: Square[], currentLocation: Square) {
+        return availableMoves.filter(square => {
+            const rowInBounds = 0 <= currentLocation.row && currentLocation.row < GameSettings.BOARD_SIZE;
+            const colInBounds = 0 <= currentLocation.col && currentLocation.col < GameSettings.BOARD_SIZE;
+
+            return rowInBounds && colInBounds;
+        });
+    }
 }
